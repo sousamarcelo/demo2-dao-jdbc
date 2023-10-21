@@ -56,17 +56,8 @@ public class SellerDaoJDBC implements SellerDao {
 			rs = st.executeQuery();
 			//tranformando os dados de tabela em objetos relacionados
 			if (rs.next()) {
-				Department dep = new Department(); 					//Criando um objeto Departmento que sera populado com os dado do banco
-				dep.setId(rs.getInt("DepartmentId")); 				//acessando a coluna correspondente ao Id do departamento no ResultSet rs e setando no objeto Department criado acima
-				dep.setName(rs.getString("Name")); 					//acessando a coluna correspondente ao Name do departamento no ResultSet rs e setando no objeto Department criado acima
-				Seller obj = new Seller();							//criado objeto Seller para ser populado com os dados colateados do banco
-				obj.setId(rs.getInt("Id"));
-				obj.setName(rs.getString("Name"));
-				obj.setEmail(rs.getString("Email"));
-				obj.setBaseSalary(rs.getDouble("BaseSalary"));
-				obj.setBirthDate(rs.getDate("BirthDate"));
-				obj.setDepartment(dep); 							// associação de objeto "dep" criado acima
-				
+				Department dep = instantiateDepartment(rs); 									//criado metodo a parte para instanciação e adidiação dos dados no objeto, assim o codigo fica menos poluido
+				Seller obj = instantiateSeller(rs, dep); 										//criado metodo a parte para instanciação e adidiação dos dados no objeto, assim o codigo fica menos poluido				
 				return obj;				
 			}
 			return null;
@@ -74,11 +65,29 @@ public class SellerDaoJDBC implements SellerDao {
 		} catch (SQLException e) {
 			throw new DbException(e.getMessage());
 		} finally {
-			DB.closeStatement(st);
+			DB.closeStatement(st); 
 			DB.closeResultSet(rs);
 		}
 		
 		
+	}
+
+	private Seller instantiateSeller(ResultSet rs, Department dep) throws SQLException {
+		Seller obj = new Seller();							//criado objeto Seller para ser populado com os dados colateados do banco
+		obj.setId(rs.getInt("Id"));
+		obj.setName(rs.getString("Name"));
+		obj.setEmail(rs.getString("Email"));
+		obj.setBaseSalary(rs.getDouble("BaseSalary"));
+		obj.setBirthDate(rs.getDate("BirthDate"));
+		obj.setDepartment(dep); 							// associação de objeto "dep" criado acima
+		return obj;
+	}
+
+	private Department instantiateDepartment(ResultSet rs) throws SQLException {
+		Department dep = new Department(); 					//Criando um objeto Departmento que sera populado com os dado do banco
+		dep.setId(rs.getInt("DepartmentId")); 				//acessando a coluna correspondente ao Id do departamento no ResultSet rs e setando no objeto Department criado acima
+		dep.setName(rs.getString("Name")); 					//acessando a coluna correspondente ao Name do departamento no ResultSet rs e setando no objeto Department criado acima
+		return dep;
 	}
 
 	@Override
