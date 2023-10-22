@@ -29,7 +29,13 @@ public class Program2 {
 		System.out.println("\n=== TESTE 3: Departmente Insert ===");
 		Department newDepartment = new Department(null, "Drinks");
 		departmenteDao.insert(newDepartment);
-		System.out.println("Inserted! New id = " + newDepartment.getId());		
+		System.out.println("Inserted! New id = " + newDepartment.getId());	
+		
+		System.out.println("\n=== TESTE 4: Departmente Update ===");
+		department = departmenteDao.findById(1);
+		department.setName("Vehicles");
+		departmenteDao.update(department);
+		System.out.println("Update completed");
 		
 		sc.close();
 		
