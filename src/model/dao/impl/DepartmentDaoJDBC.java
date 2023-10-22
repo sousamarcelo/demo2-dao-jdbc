@@ -8,8 +8,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.sql.StatementEvent;
-
 import db.DB;
 import db.DbException;
 import model.dao.DepartmentDao;
